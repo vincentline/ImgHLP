@@ -1,9 +1,14 @@
-# 拼图工具SDK
+# 图片处理服务中心
 
-拼图工具SDK是一个JavaScript库，提供图片拼图和切割功能，支持将多张图片合并为一张拼图，以及将拼图切割回多张原始图片。
+## 项目简介
 
-## 功能特性
+图片处理服务中心是一个集成多个图片处理功能的一站式工具集合，旨在提供简单易用的图片处理解决方案。
 
+## 功能模块
+
+### 1. 拼图工具 (imgassli)
+
+**功能特性**：
 - ✅ 支持多张图片合并为拼图
 - ✅ 生成Alpha通道图
 - ✅ 生成位置信息文件
@@ -12,373 +17,82 @@
 - ✅ 跨平台兼容（浏览器、Node.js）
 - ✅ 简单易用的API接口
 
-## 安装
+**使用方法**：
+1. 进入 `pages/imgassli/index.html` 页面
+2. 选择要合并的图片
+3. 点击"合并图片"按钮
+4. 查看生成的拼图、Alpha通道图和位置信息
+5. 点击"切割图片"按钮可将拼图切割回原始图片
 
-### NPM
+### 2. 图片编辑器 (img) - 开发中
+
+**计划功能**：
+- 基于Konva实现的图片编辑器
+- 支持图片裁剪、调整、滤镜等功能
+- 直观的用户界面
+- 实时预览效果
+
+### 3. 更多功能 - 规划中
+
+未来将推出更多图片处理功能，敬请期待。
+
+## 目录结构
+
+```
+ImgHLP/
+├── public/              # 静态资源目录
+│   ├── assets/          # 通用资源
+│   │   ├── css/         # 样式文件
+│   │   ├── js/          # 通用脚本
+│   │   └── lib/         # 第三方库
+│   └── common/          # 通用组件
+├── pages/               # 功能页面目录
+│   ├── imgassli/        # 拼图工具
+│   │   ├── dist/        # 构建输出
+│   │   ├── src/         # 源代码
+│   │   │   ├── core/    # 核心功能
+│   │   │   └── sdk/     # SDK
+│   │   ├── examples/    # 示例
+│   │   ├── index.html   # 页面入口
+│   │   ├── package.json # 依赖配置
+│   │   └── webpack.config.js # 构建配置
+│   ├── img/             # 图片编辑器（预留）
+│   └── ...              # 其他功能页面（预留）
+├── index.html           # 根目录首页
+├── INDEX.md             # 项目索引
+├── README.md            # 项目说明
+├── UPDATE_LOG.md        # 更新日志
+├── .gitignore           # Git忽略文件
+└── package.json         # 根目录依赖配置
+```
+
+## 快速开始
+
+### 1. 访问首页
+
+打开 `index.html` 文件，即可看到所有功能模块的入口链接。
+
+### 2. 使用拼图工具
+
+1. 从首页点击"拼图工具"进入
+2. 或直接打开 `pages/imgassli/index.html`
+3. 按照页面提示使用拼图功能
+
+### 3. 构建拼图工具
+
+进入拼图工具目录：
 
 ```bash
-npm install puzzle-tool-sdk
+cd pages/imgassli
 ```
 
-### Yarn
-
-```bash
-yarn add puzzle-tool-sdk
-```
-
-### CDN
-
-```html
-<script src="https://cdn.example.com/puzzle-tool-sdk.min.js"></script>
-```
-
-## 使用方法
-
-### ES Modules
-
-```javascript
-import PuzzleTool from 'puzzle-tool-sdk';
-
-// 合并图片
-const result = await PuzzleTool.merge([image1, image2, image3]);
-
-// 切割图片
-const cutImages = await PuzzleTool.split(mergedImage, positionData);
-```
-
-### CommonJS
-
-```javascript
-const PuzzleTool = require('puzzle-tool-sdk');
-
-// 合并图片
-const result = await PuzzleTool.merge([image1, image2, image3]);
-
-// 切割图片
-const cutImages = await PuzzleTool.split(mergedImage, positionData);
-```
-
-### 浏览器全局变量
-
-```javascript
-// 合并图片
-const result = await PuzzleTool.merge([image1, image2, image3]);
-
-// 切割图片
-const cutImages = await PuzzleTool.split(mergedImage, positionData);
-```
-
-## API接口
-
-### PuzzleTool.merge(images)
-
-合并多张图片为拼图。
-
-**参数**：
-- `images`：Array - 图片源数组，每个元素可以是File、Blob或DataURL
-
-**返回值**：
-- Promise<Object> - 包含拼图、Alpha图和位置信息的对象
-  - `mergedImage`：Blob - 拼图图片
-  - `alphaImage`：Blob - Alpha通道图
-  - `positionData`：Object - 位置信息
-
-**示例**：
-
-```javascript
-const images = [
-  // File对象
-  document.querySelector('input[type="file"]').files[0],
-  // Blob对象
-  new Blob(['image data'], { type: 'image/png' }),
-  // DataURL
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
-];
-
-try {
-  const result = await PuzzleTool.merge(images);
-  
-  // 处理拼图
-  const mergedUrl = URL.createObjectURL(result.mergedImage);
-  document.querySelector('#mergedImage').src = mergedUrl;
-  
-  // 处理Alpha通道图
-  const alphaUrl = URL.createObjectURL(result.alphaImage);
-  document.querySelector('#alphaImage').src = alphaUrl;
-  
-  // 处理位置信息
-  console.log('Position data:', result.positionData);
-} catch (error) {
-  console.error('Merge failed:', error);
-}
-```
-
-### PuzzleTool.split(mergedImage, positionData)
-
-切割拼图为多张原始图片。
-
-**参数**：
-- `mergedImage`：File|Blob|string - 拼图图片
-- `positionData`：Object - 位置信息
-
-**返回值**：
-- Promise<Array> - 切割后的图片数组，每个元素包含：
-  - `filename`：string - 文件名
-  - `image`：Blob - 切割后的图片
-
-**示例**：
-
-```javascript
-const mergedImage = document.querySelector('#mergedImage').src;
-const positionData = {
-  canvasSize: { width: 335, height: 335 },
-  images: [
-    {
-      filename: 'image_0.png',
-      position: { x: 10, y: 10 },
-      size: { width: 158, height: 316 }
-    },
-    {
-      filename: 'image_1.png',
-      position: { x: 178, y: 10 },
-      size: { width: 157, height: 316 }
-    }
-  ]
-};
-
-try {
-  const cutImages = await PuzzleTool.split(mergedImage, positionData);
-  
-  // 处理切割后的图片
-  cutImages.forEach((item, index) => {
-    const url = URL.createObjectURL(item.image);
-    const img = document.createElement('img');
-    img.src = url;
-    img.alt = item.filename;
-    document.querySelector('#cutImages').appendChild(img);
-  });
-} catch (error) {
-  console.error('Split failed:', error);
-}
-```
-
-## 错误处理
-
-SDK会在以下情况下抛出错误：
-
-- 输入参数无效
-- 图片加载失败
-- 图片处理失败
-- 切割失败
-
-建议使用try-catch捕获错误：
-
-```javascript
-try {
-  const result = await PuzzleTool.merge(images);
-  // 处理结果
-} catch (error) {
-  console.error('Error:', error.message);
-}
-```
-
-## 示例
-
-### 示例1：基本使用
-
-```html
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>拼图工具示例</title>
-  <script src="dist/puzzle-tool-sdk.min.js"></script>
-</head>
-<body>
-  <h1>拼图工具示例</h1>
-  
-  <h2>1. 选择图片</h2>
-  <input type="file" id="fileInput" accept=".png" multiple>
-  <button id="mergeBtn">合并图片</button>
-  
-  <h2>2. 结果预览</h2>
-  <div id="result">
-    <h3>拼图</h3>
-    <img id="mergedImage" alt="拼图">
-    
-    <h3>Alpha通道图</h3>
-    <img id="alphaImage" alt="Alpha通道图">
-    
-    <h3>位置信息</h3>
-    <pre id="positionData"></pre>
-  </div>
-  
-  <h2>3. 切割图片</h2>
-  <button id="splitBtn">切割图片</button>
-  
-  <h3>切割结果</h3>
-  <div id="cutImages"></div>
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      let mergedResult = null;
-      
-      // 合并按钮点击事件
-      document.getElementById('mergeBtn').addEventListener('click', async function() {
-        const files = document.getElementById('fileInput').files;
-        if (files.length === 0) {
-          alert('请选择图片');
-          return;
-        }
-        
-        try {
-          // 合并图片
-          mergedResult = await PuzzleTool.merge(Array.from(files));
-          
-          // 显示拼图
-          const mergedUrl = URL.createObjectURL(mergedResult.mergedImage);
-          document.getElementById('mergedImage').src = mergedUrl;
-          
-          // 显示Alpha通道图
-          const alphaUrl = URL.createObjectURL(mergedResult.alphaImage);
-          document.getElementById('alphaImage').src = alphaUrl;
-          
-          // 显示位置信息
-          document.getElementById('positionData').textContent = JSON.stringify(mergedResult.positionData, null, 2);
-          
-          alert('合并成功！');
-        } catch (error) {
-          console.error('合并失败:', error);
-          alert('合并失败：' + error.message);
-        }
-      });
-      
-      // 切割按钮点击事件
-      document.getElementById('splitBtn').addEventListener('click', async function() {
-        if (!mergedResult) {
-          alert('请先合并图片');
-          return;
-        }
-        
-        try {
-          // 切割图片
-          const cutImages = await PuzzleTool.split(mergedResult.mergedImage, mergedResult.positionData);
-          
-          // 显示切割结果
-          const cutImagesContainer = document.getElementById('cutImages');
-          cutImagesContainer.innerHTML = '';
-          
-          cutImages.forEach((item, index) => {
-            const url = URL.createObjectURL(item.image);
-            const img = document.createElement('img');
-            img.src = url;
-            img.alt = item.filename;
-            img.style.margin = '10px';
-            cutImagesContainer.appendChild(img);
-          });
-          
-          alert('切割成功！');
-        } catch (error) {
-          console.error('切割失败:', error);
-          alert('切割失败：' + error.message);
-        }
-      });
-    });
-  </script>
-</body>
-</html>
-```
-
-### 示例2：React使用
-
-```jsx
-import React, { useState } from 'react';
-import PuzzleTool from 'puzzle-tool-sdk';
-
-function App() {
-  const [files, setFiles] = useState([]);
-  const [result, setResult] = useState(null);
-  const [cutImages, setCutImages] = useState([]);
-  
-  const handleFileChange = (e) => {
-    setFiles(Array.from(e.target.files));
-  };
-  
-  const handleMerge = async () => {
-    try {
-      const mergedResult = await PuzzleTool.merge(files);
-      setResult(mergedResult);
-      setCutImages([]);
-    } catch (error) {
-      console.error('Merge failed:', error);
-    }
-  };
-  
-  const handleSplit = async () => {
-    if (!result) return;
-    
-    try {
-      const images = await PuzzleTool.split(result.mergedImage, result.positionData);
-      setCutImages(images);
-    } catch (error) {
-      console.error('Split failed:', error);
-    }
-  };
-  
-  return (
-    <div>
-      <h1>拼图工具</h1>
-      
-      <input type="file" multiple accept=".png" onChange={handleFileChange} />
-      <button onClick={handleMerge}>合并图片</button>
-      
-      {result && (
-        <div>
-          <h2>合并结果</h2>
-          <img src={URL.createObjectURL(result.mergedImage)} alt="拼图" />
-          <img src={URL.createObjectURL(result.alphaImage)} alt="Alpha通道图" />
-          <pre>{JSON.stringify(result.positionData, null, 2)}</pre>
-          <button onClick={handleSplit}>切割图片</button>
-        </div>
-      )}
-      
-      {cutImages.length > 0 && (
-        <div>
-          <h2>切割结果</h2>
-          {cutImages.map((item, index) => (
-            <img key={index} src={URL.createObjectURL(item.image)} alt={item.filename} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default App;
-```
-
-## 浏览器兼容性
-
-- Chrome 60+
-- Firefox 55+
-- Safari 12+
-- Edge 79+
-
-## 技术依赖
-
-- 无外部依赖，纯JavaScript实现
-- 支持浏览器内置的Canvas API
-
-## 开发
-
-### 安装依赖
+安装依赖：
 
 ```bash
 npm install
 ```
 
-### 构建
+构建项目：
 
 ```bash
 # 开发环境构建
@@ -388,17 +102,24 @@ npm run build:dev
 npm run build:prod
 ```
 
-### 开发服务器
+## 技术栈
 
-```bash
-npm run dev
-```
+- **前端**：HTML5, CSS3, JavaScript (ES6+)
+- **构建工具**：Webpack
+- **第三方库**：无外部依赖，纯JavaScript实现
+- **浏览器兼容**：
+  - Chrome 60+
+  - Firefox 55+
+  - Safari 12+
+  - Edge 79+
 
-### 代码检查
+## 项目索引
 
-```bash
-npm run lint
-```
+详细的项目结构和文件索引请查看 `INDEX.md` 文件。
+
+## 更新日志
+
+详细的更新记录请查看 `UPDATE_LOG.md` 文件。
 
 ## 许可证
 
@@ -408,14 +129,10 @@ MIT License
 
 欢迎提交Issue和Pull Request！
 
-## 更新日志
+## 联系我们
 
-### v1.0.0
+如有任何问题或建议，敬请反馈。
 
-- ✨ 初始版本
-- ✅ 支持图片拼图功能
-- ✅ 支持图片切割功能
-- ✅ 生成Alpha通道图
-- ✅ 生成位置信息文件
-- ✅ 支持多种图片源格式
-- ✅ 跨平台兼容
+---
+
+**© 2026 图片处理服务中心**

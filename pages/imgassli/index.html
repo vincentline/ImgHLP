@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>拼图工具 - imgassli</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>拼图工具</h1>
+  
+  <h2>1. 选择图片</h2>
+  <input type="file" id="fileInput" accept=".png" multiple>
+  <button id="mergeBtn">合并图片</button>
+  
+  <h2>2. 结果预览</h2>
+  <div id="result">
+    <h3>拼图</h3>
+    <img id="mergedImage" alt="拼图">
+    
+    <h3>Alpha通道图</h3>
+    <img id="alphaImage" alt="Alpha通道图">
+    
+    <h3>位置信息</h3>
+    <pre id="positionData"></pre>
+  </div>
+  
+  <h2>3. 切割图片</h2>
+  <button id="splitBtn">切割图片</button>
+  
+  <h3>切割结果</h3>
+  <div id="cutImages"></div>
+  
+  <script src="dist/puzzle-tool-sdk.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
