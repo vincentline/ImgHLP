@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拼图工具</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- 引入本地JSZip库 -->
+    <script src="assets/lib/jszip.min.js"></script>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header-navbar">
+        <div class="header-content">
+            <h1 class="header-title">拼图工具</h1>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span class="tooltip-text">切换主题</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="main-content">
+        <!-- 拖放区域 -->
+        <section class="drop-section">
+            <div class="drop-container" id="dropContainer">
+                <div class="drop-content">
+                    <svg class="drop-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <h2 class="drop-title">拖放PNG文件到此处</h2>
+                    <p class="drop-hint">支持多张PNG图片同时拖放</p>
+                    <p class="drop-subhint">或</p>
+                    <button class="btn-secondary" id="browseBtn">浏览文件</button>
+                    <input type="file" id="fileInput" accept=".png" multiple style="display: none;">
+                </div>
+            </div>
+        </section>
+
+        <!-- 预览区域 -->
+        <section class="preview-section" id="previewSection" style="display: none;">
+            <h2 class="section-title">预览结果</h2>
+            
+            <!-- 图片预览容器 -->
+            <div class="preview-container">
+                <!-- 原始拼接图 -->
+                <div class="preview-item">
+                    <h3 class="preview-title">原始拼接图</h3>
+                    <div class="preview-image-wrapper">
+                        <canvas id="resultCanvas" class="preview-canvas"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Alpha通道图 -->
+                <div class="preview-item">
+                    <h3 class="preview-title">Alpha通道图</h3>
+                    <div class="preview-image-wrapper">
+                        <canvas id="alphaCanvas" class="preview-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 下载区域 -->
+        <section class="download-section" id="downloadSection" style="display: none;">
+            <h2 class="section-title">下载文件</h2>
+            <div class="download-buttons">
+                <button class="btn-primary" id="downloadResultBtn">下载原始拼接图</button>
+                <button class="btn-primary" id="downloadAlphaBtn">下载Alpha通道图</button>
+                <button class="btn-primary" id="downloadPosBtn">下载位置信息</button>
+            </div>
+        </section>
+
+        <!-- 切割功能区域 -->
+        <section class="cut-section" id="cutSection" style="display: none;">
+            <h2 class="section-title">图片切割</h2>
+            
+            <!-- 拖放区域 -->
+            <div class="drop-container" id="cutDropContainer">
+                <div class="drop-content">
+                    <svg class="drop-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <h2 class="drop-title">拖放PNG文件到此处进行切割</h2>
+                    <p class="drop-hint">请确保图片比例与原始拼接图一致</p>
+                    <p class="drop-subhint">或</p>
+                    <button class="btn-secondary" id="cutBrowseBtn">浏览文件</button>
+                    <input type="file" id="cutFileInput" accept=".png" multiple style="display: none;">
+                </div>
+            </div>
+            
+            <!-- 切割结果下载 -->
+            <div class="cut-result" id="cutResult" style="display: none;">
+                <h3 class="cut-result-title">切割结果</h3>
+                <button class="btn-primary" id="downloadCutBtn">打包下载切割图</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast提示 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
