@@ -36,14 +36,11 @@ def main():
     current_branch = stdout
     print(f"当前分支: {current_branch}")
     
-    # 切换到 main 分支
-    if current_branch != "main":
-        print("警告: 当前不在 main 分支，自动切换到 main 分支")
-        code, stdout, stderr = run_cmd("git checkout main")
-        if code != 0:
-            print(f"切换分支失败: {stderr}")
-            return 1
-        current_branch = "main"
+    # 验证分支是否为支持的分支
+    supported_branches = ["main", "master"]
+    if current_branch not in supported_branches:
+        print(f"警告: 当前分支 {current_branch} 不是推荐的分支（main 或 master）")
+        print("将继续在当前分支上操作，但建议使用 main 或 master 分支")
     
     # 检查是否有修改
     print("\n1. 检查本地修改...")
@@ -73,29 +70,23 @@ def main():
         print(f"获取变更信息失败: {stderr}")
         return 1
     
-    # 提取变更描述（不包括文件名和路径）
-    change_descriptions = []
+    # 提取变更的文件名
+    changed_files = []
     for line in stdout.split('\n'):
         if line:
             parts = line.split('\t', 1)
             if len(parts) == 2:
-                status = parts[0]
-                # 根据状态生成描述
-                if status == 'A':
-                    change_descriptions.append("新增文件")
-                elif status == 'M':
-                    change_descriptions.append("修改文件")
-                elif status == 'D':
-                    change_descriptions.append("删除文件")
-                elif status == 'R':
-                    change_descriptions.append("重命名文件")
-                else:
-                    change_descriptions.append("修改文件")
+                # 只提取文件名，不包括变更类型
+                file_path = parts[1]
+                # 对于重命名的文件，只保留新文件名
+                if '->' in file_path:
+                    file_path = file_path.split(' -> ')[1]
+                changed_files.append(file_path)
     
-    # 去重并生成最终描述
-    unique_changes = list(set(change_descriptions))
-    if unique_changes:
-        change_summary = '; '.join(unique_changes)
+    # 生成最终描述
+    if changed_files:
+        # 生成包含文件名的描述
+        change_summary = "更新文件: " + ', '.join(changed_files)
     else:
         change_summary = "文件修改"
     
@@ -110,7 +101,7 @@ def main():
     
     # 拉取远程更改
     print("\n4. 拉取远程更改...")
-    code, stdout, stderr = run_cmd("git pull --no-rebase origin main")
+    code, stdout, stderr = run_cmd(f"git pull --no-rebase origin {current_branch}")
     if code != 0:
         print(f"拉取失败，尝试直接推送: {stderr}")
     else:
@@ -118,7 +109,7 @@ def main():
     
     # 推送
     print("\n5. 推送到远程...")
-    code, stdout, stderr = run_cmd("git push origin main")
+    code, stdout, stderr = run_cmd(f"git push origin {current_branch}")
     if code != 0:
         print(f"推送失败: {stderr}")
         return 1
