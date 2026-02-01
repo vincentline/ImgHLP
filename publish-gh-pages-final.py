@@ -270,7 +270,7 @@ def publish_to_gh_pages():
         print_with_encoding("[进度] 添加所有文件并提交...")
         run_command('git add .')
         
-        commit_msg = f"Deploy docs to gh-pages: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        commit_msg = f"Deploy pages to gh-pages: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         commit_result = run_command(f"git commit -m '{commit_msg}'")
         if commit_result and commit_result.returncode != 0:
             print_with_encoding("警告：没有需要提交的更改")
