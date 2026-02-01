@@ -4,13 +4,13 @@
 
 ```
 ImgHLP/
-├── public/              # 静态资源目录
-│   ├── assets/          # 通用资源
-│   │   ├── css/         # 样式文件
-│   │   ├── js/          # 通用脚本
-│   │   └── lib/         # 第三方库
-│   └── common/          # 通用组件
 ├── pages/               # 功能页面目录
+│   ├── public/          # 静态资源目录
+│   │   ├── assets/      # 通用资源
+│   │   │   ├── css/     # 样式文件
+│   │   │   ├── js/      # 通用脚本
+│   │   │   └── lib/     # 第三方库
+│   │   └── common/      # 通用组件
 │   ├── auth/            # 登录认证
 │   │   ├── login.html   # 登录页面
 │   │   ├── styles.css   # 登录页面样式
@@ -96,8 +96,8 @@ ImgHLP/
 ## 静态资源
 
 ### 通用资源
-- **目录**：`public/assets/`
-- **第三方库**：`public/assets/lib/`
+- **目录**：`pages/public/assets/`
+- **第三方库**：`pages/public/assets/lib/`
 
 ### 拼图工具资源
 - **构建输出**：`pages/imgassli/dist/`
