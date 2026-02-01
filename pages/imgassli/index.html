@@ -5,41 +5,301 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>拼图工具 - imgassli</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* 设计系统样式 */
+    :root {
+      --font-family-base: 'Segoe UI', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-size-xs: 10px;
+      --font-size-sm: 12px;
+      --font-size-base: 13px;
+      --font-size-md: 14px;
+      --font-size-lg: 16px;
+      --font-size-xl: 20px;
+      --font-weight-normal: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+      --text-primary: #333333;
+      --text-secondary: #818181;
+      --text-tertiary: #999999;
+      --text-muted: #AAAAAA;
+      --bg-base: #fcfcfc;
+      --bg-elevated: #ffffff;
+      --bg-input: #F3F3F3;
+      --border-light: #F3F3F3;
+      --border-base: #e3e3e3;
+      --border-medium: #CCCCCC;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+    }
+    
+    body {
+      font-family: var(--font-family-base);
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--space-6);
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-8);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--border-light);
+    }
+    
+    h1 {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      margin: 0;
+    }
+    
+    h2 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      margin: var(--space-6) 0 var(--space-4) 0;
+    }
+    
+    h3 {
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-medium);
+      margin: var(--space-4) 0 var(--space-2) 0;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 0 var(--space-4);
+      height: 36px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-base);
+      background-color: var(--bg-elevated);
+      color: var(--text-primary);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .btn:hover {
+      background-color: var(--bg-input);
+      border-color: var(--border-medium);
+    }
+    
+    .btn:active {
+      background-color: var(--border-light);
+    }
+    
+    .btn-primary {
+      background-color: #5b5b5b;
+      border-color: #5b5b5b;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #6b6b6b;
+      border-color: #6b6b6b;
+    }
+    
+    .section {
+      margin-bottom: var(--space-8);
+      padding: var(--space-6);
+      background-color: var(--bg-elevated);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+    }
+    
+    .file-input {
+      margin-bottom: var(--space-4);
+    }
+    
+    #result {
+      margin-top: var(--space-4);
+    }
+    
+    #result img {
+      max-width: 100%;
+      margin-bottom: var(--space-4);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+    }
+    
+    #positionData {
+      background-color: var(--bg-input);
+      padding: var(--space-4);
+      border-radius: var(--radius-sm);
+      font-family: 'Courier New', monospace;
+      font-size: var(--font-size-sm);
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    
+    #cutImages {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      margin-top: var(--space-4);
+    }
+    
+    #cutImages img {
+      max-width: 200px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    
+    .user-name {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-medium);
+    }
+  </style>
 </head>
 <body>
-  <h1>拼图工具</h1>
-  
-  <h2>1. 选择图片</h2>
-  <input type="file" id="fileInput" accept=".png" multiple>
-  <button id="mergeBtn">合并图片</button>
-  
-  <h2>2. 结果预览</h2>
-  <div id="result">
-    <h3>拼图</h3>
-    <img id="mergedImage" alt="拼图">
+  <div class="container">
+    <header>
+      <h1>拼图工具</h1>
+      <div class="user-info">
+        <span class="user-name" id="userName">用户</span>
+        <button class="btn" id="loginBtn">登录</button>
+        <button class="btn" id="logoutBtn">登出</button>
+      </div>
+    </header>
     
-    <h3>Alpha通道图</h3>
-    <img id="alphaImage" alt="Alpha通道图">
+    <div class="section">
+      <h2>1. 选择图片</h2>
+      <input type="file" id="fileInput" accept=".png" multiple class="file-input">
+      <div class="btn-group">
+        <button id="mergeBtn" class="btn btn-primary">合并图片</button>
+      </div>
+    </div>
     
-    <h3>位置信息</h3>
-    <pre id="positionData"></pre>
+    <div class="section">
+      <h2>2. 结果预览</h2>
+      <div id="result">
+        <h3>拼图</h3>
+        <img id="mergedImage" alt="拼图">
+        
+        <h3>Alpha通道图</h3>
+        <img id="alphaImage" alt="Alpha通道图">
+        
+        <h3>位置信息</h3>
+        <pre id="positionData"></pre>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>3. 切割图片</h2>
+      <div class="btn-group">
+        <button id="splitBtn" class="btn btn-primary">切割图片</button>
+      </div>
+      
+      <h3>切割结果</h3>
+      <div id="cutImages"></div>
+    </div>
   </div>
-  
-  <h2>3. 切割图片</h2>
-  <button id="splitBtn">切割图片</button>
-  
-  <h3>切割结果</h3>
-  <div id="cutImages"></div>
   
   <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
   <script>
     // 检查登录状态
-    if (!localStorage.getItem('authToken')) {
-      alert('请先登录');
-      window.location.href = '../auth/login.html';
+    function checkLoginStatus() {
+      const token = localStorage.getItem('authToken');
+      const userInfo = localStorage.getItem('userInfo');
+      
+      if (token) {
+        // 已登录
+        document.getElementById('loginBtn').style.display = 'none';
+        document.getElementById('logoutBtn').style.display = 'inline-block';
+        
+        if (userInfo) {
+          try {
+            const user = JSON.parse(userInfo);
+            document.getElementById('userName').textContent = user.username || '用户';
+          } catch (e) {
+            document.getElementById('userName').textContent = '用户';
+          }
+        }
+      } else {
+        // 未登录
+        document.getElementById('loginBtn').style.display = 'inline-block';
+        document.getElementById('logoutBtn').style.display = 'none';
+        document.getElementById('userName').textContent = '未登录';
+      }
     }
+    
+    // 初始化
+    checkLoginStatus();
+    
+    // 登录按钮点击事件
+    document.getElementById('loginBtn').addEventListener('click', function() {
+      const returnUrl = encodeURIComponent(window.location.href);
+      window.location.href = `../auth/login.html?returnUrl=${returnUrl}`;
+    });
+    
+    // 登出按钮点击事件
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userInfo');
+      checkLoginStatus();
+      // 刷新页面
+      location.reload();
+    });
   </script>
   <script src="dist/puzzle-tool-sdk.js"></script>
+  <script>
+    // 调试代码
+    console.log('PuzzleTool:', PuzzleTool);
+    console.log('PuzzleTool.merge:', PuzzleTool.merge);
+    console.log('typeof PuzzleTool:', typeof PuzzleTool);
+    console.log('typeof PuzzleTool.merge:', typeof PuzzleTool.merge);
+    console.log('PuzzleTool对象属性:', Object.keys(PuzzleTool));
+    
+    // 测试PuzzleTool对象是否正确
+    if (typeof PuzzleTool === 'object' && PuzzleTool !== null) {
+      console.log('✓ PuzzleTool对象存在');
+      if (typeof PuzzleTool.merge === 'function') {
+        console.log('✓ PuzzleTool.merge方法存在');
+      } else {
+        console.log('✗ PuzzleTool.merge方法不存在');
+      }
+      if (typeof PuzzleTool.split === 'function') {
+        console.log('✓ PuzzleTool.split方法存在');
+      } else {
+        console.log('✗ PuzzleTool.split方法不存在');
+      }
+    } else {
+      console.log('✗ PuzzleTool对象不存在');
+    }
+  </script>
   <script src="script.js"></script>
 </body>
 </html>

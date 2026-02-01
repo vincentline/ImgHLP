@@ -150,7 +150,7 @@
           <p class="subtitle">一站式图片处理工具集合</p>
         </div>
         <div>
-          <a href="pages/auth/login.html" class="btn">登录</a>
+          <a href="../auth/login.html" class="btn" id="loginBtn">登录</a>
         </div>
       </div>
     </div>
@@ -162,7 +162,7 @@
         <div class="feature-icon">🧩</div>
         <h2>拼图工具</h2>
         <p>将多张图片合并为一张拼图，支持生成Alpha通道图和位置信息文件，可将拼图切割回原始图片。</p>
-        <a href="pages/imgassli/index.html" class="btn">立即使用</a>
+        <a href="../imgassli/index.html" class="btn">立即使用</a>
         <span class="status status-ready">已就绪</span>
       </div>
       
@@ -170,7 +170,7 @@
         <div class="feature-icon">🖼️</div>
         <h2>图片编辑器</h2>
         <p>基于Konva实现的图片编辑器，支持图片裁剪、调整、滤镜等功能。</p>
-        <a href="pages/image-edit/index.html" class="btn">立即使用</a>
+        <a href="../image-edit/index.html" class="btn">立即使用</a>
         <span class="status status-ready">已就绪</span>
       </div>
       
@@ -189,5 +189,17 @@
       <p>&copy; 2026 图片处理服务中心 | ImgHLP</p>
     </div>
   </footer>
+  
+  <script>
+    // 设置登录按钮的返回地址
+    window.onload = function() {
+      const loginBtn = document.getElementById('loginBtn');
+      if (loginBtn) {
+        const returnUrl = encodeURIComponent(window.location.href);
+        loginBtn.href = '../auth/login.html?returnUrl=' + returnUrl;
+        console.log('登录按钮链接已设置:', loginBtn.href);
+      }
+    };
+  </script>
 </body>
 </html>

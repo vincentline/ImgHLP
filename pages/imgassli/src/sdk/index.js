@@ -9,7 +9,7 @@ import { isValidImageSource, isValidPositionData, formatError } from '../core/ut
 /**
  * 拼图工具SDK
  */
-const PuzzleToolSDK = {
+const PuzzleTool = {
     /**
      * 合并多张图片为拼图
      * @param {Array} images - 图片源数组（File、Blob或DataURL）
@@ -94,15 +94,14 @@ const PuzzleToolSDK = {
 // 导出SDK
 if (typeof module !== 'undefined' && module.exports) {
     // CommonJS
-    module.exports = PuzzleToolSDK;
+    module.exports = PuzzleTool;
 } else if (typeof window !== 'undefined') {
     // 浏览器全局变量
-    window.PuzzleTool = PuzzleToolSDK;
+    window.PuzzleTool = PuzzleTool;
 } else if (typeof self !== 'undefined') {
     // Web Worker
-    self.PuzzleTool = PuzzleToolSDK;
+    self.PuzzleTool = PuzzleTool;
 }
 
 // ES模块导出
-export default PuzzleToolSDK;
-export { PuzzleToolSDK };
+export default PuzzleTool;
