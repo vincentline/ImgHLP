@@ -1,0 +1,35 @@
+# Serverless.yml
+component: scf
+name: imgassli-cloud
+app: imgassli
+stage: dev
+
+inputs:
+  region: ap-guangzhou
+  functionName: imgassli-functions
+  runtime: Nodejs16.17
+  codeUri: ./
+  description: 图片处理云函数
+  memorySize: 1024
+  timeout: 30
+  environment:
+    variables:
+      NODE_ENV: production
+  triggers:
+    - type: apigw
+      name: imgassli-api
+      parameters:
+        protocols:
+          - https
+        serviceName: imgassli-service
+        description: 图片处理API
+        environment: release
+        endpoints:
+          - path: /imgassli/merge
+            method: POST
+            function:
+              functionName: imgassli-merge
+          - path: /imgassli/split
+            method: POST
+            function:
+              functionName: imgassli-split

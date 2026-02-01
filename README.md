@@ -123,7 +123,7 @@ npm run build:prod
 
 ## 许可证
 
-MIT License
+私有仓库
 
 ## 贡献
 
