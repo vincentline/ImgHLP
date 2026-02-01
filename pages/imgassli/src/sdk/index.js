@@ -3,9 +3,7 @@
  * 提供拼图和切割功能的JavaScript SDK
  */
 
-import { calculateBestLayout } from '../core/layout.js';
-import { generateResultImage, generateAlphaImage, generatePositionData, canvasToBlob, loadImage } from '../core/image.js';
-import { processCutImage } from '../core/cut.js';
+import ApiService from './api.js';
 import { isValidImageSource, isValidPositionData, formatError } from '../core/utils.js';
 
 /**
@@ -31,38 +29,16 @@ const PuzzleToolSDK = {
                 }
             }
             
-            // 加载所有图片
-            const loadedImages = await Promise.all(
-                images.map(async (imageSource, index) => {
-                    const img = await loadImage(imageSource);
-                    return {
-                        file: imageSource instanceof File ? imageSource : null,
-                        image: img,
-                        name: imageSource instanceof File ? imageSource.name : `image_${index}.png`
-                    };
-                })
-            );
+            // 验证登录状态
+            if (!ApiService.isLoggedIn()) {
+                throw new Error('请先登录');
+            }
             
-            // 计算最佳布局
-            const { width, height, layout } = calculateBestLayout(loadedImages);
-            
-            // 生成拼图
-            const resultCanvas = generateResultImage(width, height, layout);
-            const resultBlob = await canvasToBlob(resultCanvas);
-            
-            // 生成Alpha通道图
-            const alphaCanvas = generateAlphaImage(width, height, layout);
-            const alphaBlob = await canvasToBlob(alphaCanvas);
-            
-            // 生成位置信息
-            const positionData = generatePositionData(width, height, layout);
+            // 调用云函数合并图片
+            const result = await ApiService.merge(images);
             
             // 返回结果
-            return {
-                mergedImage: resultBlob,
-                alphaImage: alphaBlob,
-                positionData: positionData
-            };
+            return result;
         } catch (error) {
             throw new Error(`Merge failed: ${formatError(error)}`);
         }
@@ -71,7 +47,6 @@ const PuzzleToolSDK = {
     /**
      * 切割拼图为多张原始图片
      * @param {File|Blob|string} mergedImage - 拼图图片
-     * @param {File|Blob|string} alphaImage - Alpha通道图（可选）
      * @param {Object} positionData - 位置信息
      * @returns {Promise<Array>} - 切割后的图片数组
      */
@@ -86,27 +61,33 @@ const PuzzleToolSDK = {
                 throw new Error('Invalid position data');
             }
             
-            // 加载拼图图片
-            const img = await loadImage(mergedImage);
+            // 验证登录状态
+            if (!ApiService.isLoggedIn()) {
+                throw new Error('请先登录');
+            }
             
-            // 处理切割
-            const cutImages = await processCutImage(img, positionData);
+            // 调用云函数切割图片
+            const result = await ApiService.split(mergedImage, positionData);
             
-            // 转换为Blob
-            const cutBlobs = await Promise.all(
-                cutImages.map(async (item) => {
-                    const blob = await canvasToBlob(item.canvas);
-                    return {
-                        filename: item.filename,
-                        image: blob
-                    };
-                })
-            );
-            
-            return cutBlobs;
+            return result;
         } catch (error) {
             throw new Error(`Split failed: ${formatError(error)}`);
         }
+    },
+    
+    /**
+     * 检查用户是否登录
+     * @returns {boolean} - 是否已登录
+     */
+    isLoggedIn() {
+        return ApiService.isLoggedIn();
+    },
+    
+    /**
+     * 登出
+     */
+    logout() {
+        ApiService.logout();
     }
 };
 

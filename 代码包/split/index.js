@@ -1,5 +1,22 @@
 // 图片切割云函数
 const sharp = require('sharp');
+const tcb = require('@cloudbase/node-sdk');
+
+// 初始化CloudBase
+const app = tcb.init({
+  env: '你的环境ID' // 替换为实际的CloudBase环境ID
+});
+
+// 验证认证token
+async function verifyToken(token) {
+  try {
+    const auth = app.auth();
+    const result = await auth.verifyToken(token);
+    return result;
+  } catch (error) {
+    throw new Error('认证失败');
+  }
+}
 
 // 配置
 const CONFIG = {
@@ -124,6 +141,19 @@ exports.main = async (event, context) => {
   }
   
   try {
+    // 验证认证token
+    const authHeader = event.headers?.authorization;
+    if (!authHeader) {
+      return handleCORS({
+        statusCode: 401,
+        body: JSON.stringify({ success: false, message: '缺少认证token' })
+      });
+    }
+    
+    const token = authHeader.replace('Bearer ', '');
+    await verifyToken(token);
+    console.log('认证成功');
+    
     // 解析请求体
     let body;
     if (event.isBase64Encoded) {
@@ -156,6 +186,13 @@ exports.main = async (event, context) => {
     
   } catch (error) {
     console.error('处理失败:', error);
+    // 区分认证错误和其他错误
+    if (error.message === '认证失败') {
+      return handleCORS({
+        statusCode: 401,
+        body: JSON.stringify({ success: false, message: error.message })
+      });
+    }
     return handleCORS({
       statusCode: 500,
       body: JSON.stringify({

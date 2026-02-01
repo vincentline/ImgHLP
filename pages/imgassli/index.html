@@ -31,6 +31,14 @@
   <h3>切割结果</h3>
   <div id="cutImages"></div>
   
+  <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
+  <script>
+    // 检查登录状态
+    if (!localStorage.getItem('authToken')) {
+      alert('请先登录');
+      window.location.href = '../auth/login.html';
+    }
+  </script>
   <script src="dist/puzzle-tool-sdk.js"></script>
   <script src="script.js"></script>
 </body>
