@@ -149,8 +149,12 @@
           <h1>图片处理服务中心</h1>
           <p class="subtitle">一站式图片处理工具集合</p>
         </div>
-        <div>
+        <div id="authContainer">
           <a href="../auth/login.html" class="btn" id="loginBtn">登录</a>
+          <div style="display: none; align-items: center; gap: 10px;" id="userInfoContainer">
+            <span id="userName" style="color: white;">用户</span>
+            <button class="btn btn-secondary" id="logoutBtn" style="margin-left: 10px;">退出登录</button>
+          </div>
         </div>
       </div>
     </div>
@@ -191,13 +195,85 @@
   </footer>
   
   <script>
-    // 设置登录按钮的返回地址
+    // 检查登录状态
+    function checkLoginStatus() {
+      const token = localStorage.getItem('authToken');
+      const userInfo = localStorage.getItem('userInfo');
+      
+      const loginBtn = document.getElementById('loginBtn');
+      const userInfoContainer = document.getElementById('userInfoContainer');
+      const userName = document.getElementById('userName');
+      
+      if (token && userInfo) {
+        // 已登录
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (userInfoContainer) userInfoContainer.style.display = 'flex';
+        if (userName) {
+          try {
+            const parsedUserInfo = JSON.parse(userInfo);
+            userName.textContent = parsedUserInfo.username || '用户';
+          } catch (e) {
+            userName.textContent = '用户';
+          }
+        }
+        return true;
+      } else {
+        // 未登录
+        if (loginBtn) loginBtn.style.display = 'inline-block';
+        if (userInfoContainer) userInfoContainer.style.display = 'none';
+        return false;
+      }
+    }
+    
+    // 处理登录回调
+    function handleLoginCallback() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('authToken');
+      const userInfo = urlParams.get('userInfo');
+      
+      if (token && userInfo) {
+        // 存储token和用户信息
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('userInfo', userInfo);
+        
+        // 清理URL参数
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.searchParams.delete('authToken');
+        cleanUrl.searchParams.delete('userInfo');
+        window.history.replaceState({}, '', cleanUrl.toString());
+        
+        return true;
+      }
+      return false;
+    }
+    
+    // 退出登录
+    function logout() {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userInfo');
+      checkLoginStatus();
+      alert('已成功退出登录');
+    }
+    
+    // 页面加载时执行
     window.onload = function() {
+      // 处理登录回调
+      handleLoginCallback();
+      
+      // 检查登录状态
+      checkLoginStatus();
+      
+      // 设置登录按钮的返回地址
       const loginBtn = document.getElementById('loginBtn');
       if (loginBtn) {
         const returnUrl = encodeURIComponent(window.location.href);
         loginBtn.href = '../auth/login.html?returnUrl=' + returnUrl;
-        console.log('登录按钮链接已设置:', loginBtn.href);
+      }
+      
+      // 绑定退出登录事件
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
       }
     };
   </script>
