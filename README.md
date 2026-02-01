@@ -45,7 +45,7 @@
 
 **使用方法**：
 1. 从首页点击"拼图工具"进入
-2. 或直接打开 `pages/imgassli/index.html`
+2. 或直接打开 `docs/imgassli/index.html`
 3. 未登录时会自动跳转到登录页面
 4. 登录后返回拼图工具页面
 5. 选择要合并的图片
@@ -88,7 +88,7 @@ ImgHLP/
 │   │   ├── js/          # 通用脚本
 │   │   └── lib/         # 第三方库
 │   └── common/          # 通用组件
-├── pages/               # 功能页面目录
+├── docs/               # 功能页面目录
 │   ├── auth/            # 登录认证
 │   │   ├── login.html   # 登录页面
 │   │   ├── styles.css   # 登录页面样式
@@ -126,7 +126,7 @@ ImgHLP/
 ### 2. 使用拼图工具
 
 1. 从首页点击"拼图工具"进入
-2. 或直接打开 `pages/imgassli/index.html`
+2. 或直接打开 `docs/imgassli/index.html`
 3. 未登录时会自动跳转到登录页面
 4. 输入任意用户名和密码登录
 5. 登录后返回拼图工具页面
@@ -140,7 +140,7 @@ ImgHLP/
 进入拼图工具目录：
 
 ```bash
-cd pages/imgassli
+cd docs/imgassli
 ```
 
 安装依赖：
@@ -170,12 +170,12 @@ npm run build
    - 配置 HTTP 触发器
 
 3. **配置前端**：
-   - 修改 `pages/imgassli/src/sdk/api.js` 中的云函数 URL
+   - 修改 `docs/imgassli/src/sdk/api.js` 中的云函数 URL
 
 ### 5. 测试认证功能
 
 1. **清除登录状态**：打开浏览器开发者工具，清除 localStorage
-2. **访问需要认证的页面**：如 `pages/imgassli/index.html`
+2. **访问需要认证的页面**：如 `docs/imgassli/index.html`
 3. **自动跳转**：页面会自动跳转到登录页面
 4. **登录测试**：输入任意用户名和密码登录
 5. **验证跳转**：登录成功后会返回之前访问的页面

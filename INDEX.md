@@ -4,7 +4,7 @@
 
 ```
 ImgHLP/
-├── pages/               # 功能页面目录
+├── docs/               # 功能页面目录
 │   ├── public/          # 静态资源目录
 │   │   ├── assets/      # 通用资源
 │   │   │   ├── css/     # 样式文件
@@ -24,13 +24,13 @@ ImgHLP/
 │   │   ├── index.html   # 页面入口
 │   │   ├── package.json # 依赖配置
 │   │   └── webpack.config.js # 构建配置
+│   ├── index.html       # 首页
 │   ├── img/             # 图片编辑器（预留）
 │   └── ...              # 其他功能页面（预留）
 ├── 代码包/              # 云函数代码包
 │   ├── merge/           # 合并图片云函数
 │   ├── split/           # 切割图片云函数
 │   └── serverless.yml   # Serverless配置
-├── index.html           # 根目录首页
 ├── INDEX.md             # 项目索引
 ├── README.md            # 项目说明
 ├── UPDATE_LOG.md        # 更新日志
@@ -47,8 +47,8 @@ ImgHLP/
 - **特点**：支持登录功能，登录后可返回首页
 
 ### 2. 认证模块 (auth)
-- **目录**：`pages/auth/`
-- **页面入口**：`pages/auth/login.html`
+- **目录**：`docs/auth/`
+- **页面入口**：`docs/auth/login.html`
 - **功能**：用户登录认证
 - **特点**：
   - 支持模拟登录（开发环境）
@@ -56,8 +56,8 @@ ImgHLP/
   - 集成腾讯云 CloudBase 认证（预留）
 
 ### 3. 拼图工具 (imgassli)
-- **目录**：`pages/imgassli/`
-- **页面入口**：`pages/imgassli/index.html`
+- **目录**：`docs/imgassli/`
+- **页面入口**：`docs/imgassli/index.html`
 - **核心功能**：
   - 图片合并为拼图
   - 生成Alpha通道图
@@ -68,10 +68,10 @@ ImgHLP/
   - 支持认证Token验证
   - 未登录时自动跳转到登录页面
 - **源代码**：
-  - 核心逻辑：`pages/imgassli/src/core/`
-  - SDK：`pages/imgassli/src/sdk/`（包含API服务层）
-- **构建配置**：`pages/imgassli/webpack.config.js`
-- **依赖配置**：`pages/imgassli/package.json`
+  - 核心逻辑：`docs/imgassli/src/core/`
+  - SDK：`docs/imgassli/src/sdk/`（包含API服务层）
+- **构建配置**：`docs/imgassli/webpack.config.js`
+- **依赖配置**：`docs/imgassli/package.json`
 
 ### 4. 云函数 (代码包)
 - **目录**：`代码包/`
@@ -85,23 +85,23 @@ ImgHLP/
   - 支持模拟Token验证（开发环境）
 
 ### 5. 图片编辑器 (img) - 预留
-- **目录**：`pages/img/`
+- **目录**：`docs/img/`
 - **状态**：开发中
 - **计划功能**：基于Konva实现的图片编辑器，支持图片裁剪、调整、滤镜等功能
 
 ### 6. 未来功能 - 预留
-- **目录**：`pages/` 下的其他子目录
+- **目录**：`docs/` 下的其他子目录
 - **状态**：规划中
 
 ## 静态资源
 
 ### 通用资源
-- **目录**：`pages/public/assets/`
-- **第三方库**：`pages/public/assets/lib/`
+- **目录**：`docs/public/assets/`
+- **第三方库**：`docs/public/assets/lib/`
 
 ### 拼图工具资源
-- **构建输出**：`pages/imgassli/dist/`
-- **示例**：`pages/imgassli/examples/`
+- **构建输出**：`docs/imgassli/dist/`
+- **示例**：`docs/imgassli/examples/`
 
 ## 配置文件
 
@@ -112,19 +112,19 @@ ImgHLP/
 | UPDATE_LOG.md   | 更新日志             | `UPDATE_LOG.md`           |
 | README.md       | 项目说明             | `README.md`               |
 | INDEX.md        | 项目索引             | `INDEX.md`                |
-| webpack.config.js | 拼图工具构建配置   | `pages/imgassli/webpack.config.js` |
-| package.json    | 拼图工具依赖配置     | `pages/imgassli/package.json` |
+| webpack.config.js | 拼图工具构建配置   | `docs/imgassli/webpack.config.js` |
+| package.json    | 拼图工具依赖配置     | `docs/imgassli/package.json` |
 
 ## 快速导航
 
 ### 功能页面
 - [首页](index.html)
-- [拼图工具](pages/imgassli/index.html)
-- [图片编辑器](pages/img/) - 开发中
+- [拼图工具](docs/imgassli/index.html)
+- [图片编辑器](docs/img/) - 开发中
 
 ### 开发相关
-- [拼图工具构建](pages/imgassli/webpack.config.js)
-- [拼图工具依赖](pages/imgassli/package.json)
+- [拼图工具构建](docs/imgassli/webpack.config.js)
+- [拼图工具依赖](docs/imgassli/package.json)
 
 ## 注意事项
 
