@@ -13,16 +13,16 @@ module.exports = {
   // 构建入口: 配置多个模块的入口点
   entry: {
     // 拼图工具 SDK 入口
-    'imgassli-sdk': './src/modules/imgassli/src/sdk/index.js',
+    'imgassli/dist/puzzle-tool-sdk': './src/modules/imgassli/src/sdk/index.js',
     // 图片编辑器入口
-    'image-edit': './src/modules/image-edit/script.js'
+    'image-edit/dist/bundle': './src/modules/image-edit/script.js'
   },
   
   // 构建输出配置
   output: {
     path: path.resolve(__dirname, 'docs'), // 输出根目录
-    filename: '[name]/dist/bundle.js', // 输出文件名
-    library: '[name === "imgassli-sdk" ? "PuzzleTool" : ""]', // 库名称配置
+    filename: '[name].js', // 输出文件名
+    library: '[name.includes("imgassli") ? "PuzzleTool" : ""]', // 库名称配置
     libraryTarget: 'umd', // 支持 CommonJS, AMD 和全局变量
     globalObject: 'this' // 确保在不同环境中正确引用全局对象
   },
