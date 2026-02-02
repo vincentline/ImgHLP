@@ -4,6 +4,10 @@
   "description": "图片处理服务中心，集成多个图片处理功能的一站式工具集合",
   "private": true,
   "scripts": {
+    "build": "webpack",
+    "build:dev": "webpack --mode development",
+    "build:prod": "webpack --mode production",
+    "dev": "webpack serve --mode development",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -14,6 +18,21 @@
   ],
   "author": "",
   "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.0",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "konva": "^10.2.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-konva": "^19.2.1"
+  },
   "repository": {
     "type": "git",
     "url": ""

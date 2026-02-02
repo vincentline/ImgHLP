@@ -82,28 +82,19 @@
 
 ```
 ImgHLP/
-├── public/              # 静态资源目录
-│   ├── assets/          # 通用资源
-│   │   ├── css/         # 样式文件
-│   │   ├── js/          # 通用脚本
-│   │   └── lib/         # 第三方库
-│   └── common/          # 通用组件
-├── docs/               # 功能页面目录
-│   ├── auth/            # 登录认证
-│   │   ├── login.html   # 登录页面
-│   │   ├── styles.css   # 登录页面样式
-│   │   └── header_logo_white.png # 登录页面logo
-│   ├── imgassli/        # 拼图工具
-│   │   ├── dist/        # 构建输出
-│   │   ├── src/         # 源代码
-│   │   │   ├── core/    # 核心功能
-│   │   │   └── sdk/     # SDK（包含API服务层）
-│   │   ├── examples/    # 示例
-│   │   ├── index.html   # 页面入口
-│   │   ├── package.json # 依赖配置
-│   │   └── webpack.config.js # 构建配置
-│   ├── img/             # 图片编辑器（预留）
-│   └── ...              # 其他功能页面（预留）
+├── src/                # 源代码
+│   ├── modules/        # 功能模块
+│   │   ├── auth/       # 登录系统
+│   │   ├── imgassli/   # 拼图工具
+│   │   └── image-edit/ # 图片编辑器
+│   └── common/         # 公共组件和API服务
+├── docs/               # 构建产物和发布目录
+│   ├── auth/           # 构建后的登录系统
+│   ├── imgassli/       # 构建后的拼图工具
+│   ├── image-edit/     # 构建后的图片编辑器
+│   ├── imgassli-sdk/   # 拼图工具SDK构建产物
+│   ├── common/         # 公共API服务
+│   └── index.html      # 项目主页
 ├── 代码包/              # 云函数代码包
 │   ├── merge/           # 合并图片云函数
 │   ├── split/           # 切割图片云函数
@@ -113,6 +104,7 @@ ImgHLP/
 ├── README.md            # 项目说明
 ├── UPDATE_LOG.md        # 更新日志
 ├── .gitignore           # Git忽略文件
+├── webpack.config.js    # 构建配置
 ├── 腾讯云部署方案.md     # 腾讯云部署方案
 └── package.json         # 根目录依赖配置
 ```
@@ -135,13 +127,9 @@ ImgHLP/
 8. 查看生成的拼图、Alpha通道图和位置信息
 9. 点击"切割图片"按钮可将拼图切割回原始图片（调用云函数处理）
 
-### 3. 构建拼图工具
+### 3. 构建项目
 
-进入拼图工具目录：
-
-```bash
-cd docs/imgassli
-```
+在项目根目录执行：
 
 安装依赖：
 
@@ -152,9 +140,17 @@ npm install
 构建项目：
 
 ```bash
-# 构建项目
+# 构建所有模块
 npm run build
+
+# 开发模式构建
+npm run build:dev
+
+# 生产模式构建
+npm run build:prod
 ```
+
+构建产物将生成到 `docs/` 目录中。
 
 ### 4. 部署云函数
 
@@ -170,7 +166,7 @@ npm run build
    - 配置 HTTP 触发器
 
 3. **配置前端**：
-   - 修改 `docs/imgassli/src/sdk/api.js` 中的云函数 URL
+   - 修改 `src/common/api.js` 中的云函数 URL
 
 ### 5. 测试认证功能
 
@@ -180,14 +176,57 @@ npm run build
 4. **登录测试**：输入任意用户名和密码登录
 5. **验证跳转**：登录成功后会返回之前访问的页面
 
-### 6. 配置生产环境
+### 6. 测试跨域登录
+
+1. **创建测试页面**：在项目根目录创建 `test-cross-domain.html`
+2. **访问测试页面**：打开 `http://localhost:8080/test-cross-domain.html`
+3. **点击登录**：点击"去登录"按钮
+4. **登录测试**：输入任意用户名和密码登录
+5. **验证跨域**：登录成功后会返回测试页面，并显示登录成功信息
+6. **测试图片处理**：选择图片并点击"测试合并图片"按钮
+
+### 7. 跨域集成指南
+
+**目标页面集成步骤**：
+
+1. **添加API服务引用**：
+   ```html
+   <script src="https://your-domain.com/common/api.js"></script>
+   ```
+
+2. **处理登录回调**：
+   ```javascript
+   window.onload = function() {
+     if (ApiService.handleLoginCallback()) {
+       console.log('登录成功！');
+     }
+   };
+   ```
+
+3. **检查登录状态**：
+   ```javascript
+   if (!ApiService.isLoggedIn()) {
+     ApiService.redirectToLogin();
+   }
+   ```
+
+4. **调用图片处理API**：
+   ```javascript
+   // 合并图片
+   const result = await ApiService.merge(images);
+   
+   // 切割图片
+   const result = await ApiService.split(mergedImage, positionData);
+   ```
+
+### 8. 配置生产环境
 
 1. **替换环境 ID**：将所有代码中的 `你的环境ID` 替换为实际的 CloudBase 环境 ID
-2. **配置云函数 URL**：替换 `api.js` 中的云函数 URL
+2. **配置云函数 URL**：替换 `src/common/api.js` 中的云函数 URL
 3. **启用真实认证**：在云函数中启用 CloudBase 真实认证验证
 4. **部署前端**：将前端代码部署到静态网站托管服务
 
-### 7. 开发环境说明
+### 9. 开发环境说明
 
 - **模拟登录**：开发环境下使用模拟登录，输入任意用户名和密码即可
 - **模拟 Token**：云函数会接受以 `mock-token-` 开头的 Token
