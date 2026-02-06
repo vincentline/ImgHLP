@@ -4,8 +4,7 @@
   "description": "图片合并云函数",
   "main": "index.js",
   "dependencies": {
-    "sharp": "^0.32.0",
-    "@cloudbase/node-sdk": "^2.10.0"
+    "sharp": "^0.32.0"
   },
   "devDependencies": {},
   "scripts": {

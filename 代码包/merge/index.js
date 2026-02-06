@@ -1,11 +1,5 @@
 // 图片合并云函数
 const sharp = require('sharp');
-const tcb = require('@cloudbase/node-sdk');
-
-// 初始化CloudBase
-const app = tcb.init({
-  env: 'imghlp-5gh0mgfu98b71b4e' // 替换为实际的CloudBase环境ID
-});
 
 // 验证认证token
 async function verifyToken(token) {
@@ -16,10 +10,12 @@ async function verifyToken(token) {
       return { user: { username: 'mock-user' } };
     }
     
-    // 生产环境：使用CloudBase验证
-    const auth = app.auth();
-    const result = await auth.verifyToken(token);
-    return result;
+    // 生产环境：这里可以替换为阿里云RAM或其他认证方式
+    // 暂时使用简单的token验证
+    if (!token || token.length < 8) {
+      throw new Error('认证失败');
+    }
+    return { user: { username: 'authenticated-user' } };
   } catch (error) {
     throw new Error('认证失败');
   }
@@ -161,12 +157,18 @@ async function mergeImages(images) {
 }
 
 // 主处理函数
-exports.main = async (event, context) => {
+exports.handler = async (event, context) => {
   console.log('=== 图片合并函数被调用 ===');
   console.log('Event:', JSON.stringify(event, null, 2));
   
+  // 阿里云FC HTTP触发器格式适配
+  let httpMethod = event.httpMethod || event.method || 'POST';
+  let headers = event.headers || {};
+  let body = event.body || '';
+  let isBase64Encoded = event.isBase64Encoded || false;
+  
   // 处理OPTIONS请求
-  if (event.httpMethod === 'OPTIONS') {
+  if (httpMethod === 'OPTIONS') {
     console.log('处理OPTIONS请求');
     return handleCORS({
       statusCode: 204,
@@ -175,7 +177,7 @@ exports.main = async (event, context) => {
   }
   
   // 只处理POST请求
-  if (event.httpMethod !== 'POST') {
+  if (httpMethod !== 'POST') {
     console.log('处理非POST请求');
     return handleCORS({
       statusCode: 405,
@@ -185,7 +187,7 @@ exports.main = async (event, context) => {
   
   try {
     // 验证认证token
-    const authHeader = event.headers?.authorization;
+    const authHeader = headers.authorization || headers.Authorization;
     if (!authHeader) {
       return handleCORS({
         statusCode: 401,
@@ -198,22 +200,26 @@ exports.main = async (event, context) => {
     console.log('认证成功');
     
     // 解析请求体
-    let body;
-    if (event.isBase64Encoded) {
-      body = JSON.parse(Buffer.from(event.body, 'base64').toString('utf-8'));
+    let requestBody;
+    if (isBase64Encoded) {
+      requestBody = JSON.parse(Buffer.from(body, 'base64').toString('utf-8'));
     } else {
-      body = JSON.parse(event.body || '{}');
+      try {
+        requestBody = JSON.parse(body || '{}');
+      } catch {
+        requestBody = {};
+      }
     }
     
-    console.log('请求体:', JSON.stringify(body, null, 2));
+    console.log('请求体:', JSON.stringify(requestBody, null, 2));
     
     // 验证参数
-    if (!body.images || !Array.isArray(body.images)) {
+    if (!requestBody.images || !Array.isArray(requestBody.images)) {
       throw new Error('缺少images参数');
     }
     
     // 合并图片
-    const result = await mergeImages(body.images);
+    const result = await mergeImages(requestBody.images);
     
     console.log('处理成功，返回结果');
     return handleCORS({
