@@ -28,10 +28,14 @@
   },
   "dependencies": {
     "buffer": "^6.0.3",
+    "imagemin": "^9.0.1",
+    "imagemin-pngquant": "^10.0.0",
+    "jszip": "^3.10.1",
     "konva": "^10.2.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-konva": "^19.2.1"
+    "react-konva": "^19.2.1",
+    "tinypng-lib": "^1.1.24"
   },
   "repository": {
     "type": "git",

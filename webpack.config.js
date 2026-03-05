@@ -15,16 +15,24 @@ module.exports = {
     // 拼图工具 SDK 入口
     'imgassli/dist/puzzle-tool-sdk': './src/modules/imgassli/src/sdk/index.js',
     // 图片编辑器入口
-    'image-edit/dist/bundle': './src/modules/image-edit/script.js'
+    'image-edit/dist/bundle': './src/modules/image-edit/script.js',
+    // PNG压缩工具入口
+    'png-compress/dist/bundle': './src/modules/png-compress/index.js'
   },
   
   // 构建输出配置
   output: {
     path: path.resolve(__dirname, 'docs'), // 输出根目录
     filename: '[name].js', // 输出文件名
-    library: '[name.includes("imgassli") ? "PuzzleTool" : ""]', // 库名称配置
-    libraryTarget: 'umd', // 支持 CommonJS, AMD 和全局变量
-    globalObject: 'this' // 确保在不同环境中正确引用全局对象
+    publicPath: '/', // 公共路径，确保WASM文件正确引用
+    globalObject: 'this', // 确保在不同环境中正确引用全局对象
+    assetModuleFilename: 'assets/[name][ext]'
+  },
+  
+  // 实验性功能
+  experiments: {
+    asyncWebAssembly: true,
+    layers: true
   },
   
   // 模块处理规则
@@ -39,13 +47,21 @@ module.exports = {
             presets: ['@babel/preset-env'] // 使用 @babel/preset-env 预设
           }
         }
+      },
+      {
+        test: /\.wasm$/,
+        type: 'asset/resource'
       }
     ]
   },
   
   // 模块解析配置
   resolve: {
-    extensions: ['.js'] // 自动解析的扩展名
+    extensions: ['.js', '.wasm'], // 自动解析的扩展名
+    fallback: {
+      path: false,
+      fs: false
+    }
   },
   
   // 优化配置
@@ -56,5 +72,12 @@ module.exports = {
   // 插件配置
   plugins: [
     new webpack.ProgressPlugin() // 显示构建进度
-  ]
+  ],
+  
+  // 性能提示配置
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000
+  }
 };

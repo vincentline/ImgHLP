@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PNG压缩工具 - ImgHLP</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="../favicon.png" type="image/png">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header-navbar">
+      <div class="header-left-action">
+        <a href="../index.html" class="nav-link">← 返回首页</a>
+      </div>
+      <h1 class="header-navbar-title">PNG压缩工具</h1>
+      <div class="header-right-action">
+        <select class="engine-select" id="engineSelect">
+          <option value="tinypng">TinyPNG</option>
+          <option value="pngquant">PNGQuant</option>
+        </select>
+        <button class="theme-toggle" id="themeToggle" title="切换主题">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="drop-zone" id="dropZone">
+        <div class="drop-zone-content">
+          <div class="drop-icon">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <p class="drop-text">拖拽图片到此处</p>
+          <p class="drop-hint">或点击选择文件</p>
+          <p class="drop-formats">支持 PNG / JPG / WEBP 格式</p>
+        </div>
+        <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" multiple hidden>
+      </div>
+
+      <div class="image-list" id="imageList"></div>
+
+      <div class="footer-bar" id="footerBar">
+        <div class="footer-actions">
+          <button class="btn-large-primary" id="compressAllBtn" disabled>
+            <span class="btn-icon">📦</span>
+            全部压缩
+          </button>
+          <button class="btn-large-primary" id="downloadAllBtn" disabled>
+            <span class="btn-icon">📥</span>
+            打包下载
+          </button>
+          <button class="btn-large-danger" id="clearAllBtn" disabled>
+            <span class="btn-icon">🗑️</span>
+            清空列表
+          </button>
+        </div>
+        <div class="footer-stats" id="footerStats">
+          <span class="stats-item">总计: <strong id="totalCount">0</strong> 个文件</span>
+          <span class="stats-item">原始: <strong id="totalOriginal">0 KB</strong></span>
+          <span class="stats-item">压缩后: <strong id="totalCompressed">0 KB</strong></span>
+          <span class="stats-item">节省: <strong id="totalSaved">0%</strong></span>
+        </div>
+      </div>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="drop-overlay" id="dropOverlay">
+      <div class="drop-hint-overlay">
+        <span class="drop-hint-text">释放鼠标上传图片</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="lib/compressor.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pngquant@1.0.2/lib/pngquant.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
