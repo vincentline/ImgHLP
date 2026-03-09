@@ -73,6 +73,3 @@ yarn-error.log*
 
 # 文档
 代码包/
-
-# Trae skills (nested git repo, ignored)
-.trae/skills/
