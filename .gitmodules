@@ -1,6 +1,6 @@
 [submodule "ai_protocol_hub"]
 	path = ai_protocol_hub
 	url = https://github.com/vincentline/AI-PH
-[submodule ".trae/skills"]
-	path = .trae/skills
+[submodule "knowledge-engine"]
+	path = knowledge-engine
 	url = https://github.com/vincentline/Knowledge-Skills
